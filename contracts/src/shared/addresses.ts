@@ -1,0 +1,3 @@
+export const Addresses = {
+    SIMPLE_MULTIPLIER_ADDR: "0xB594DA7542DE39E64518673F38BF25a085409249" as `0x${string}`,
+  }
