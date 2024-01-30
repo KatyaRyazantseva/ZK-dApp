@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ZK-dApp
+
+A simple dApp that checks if two numbers are between 0 and 5, and that they are not equal to each other. 
+
+The dApp uses Circom with SnarkJS. In Circom, there is only one data type, the field element. The default curve in Circom is BN128.
 
 ## Getting Started
 
