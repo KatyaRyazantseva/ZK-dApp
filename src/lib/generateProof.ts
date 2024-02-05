@@ -1,6 +1,6 @@
 import path from "path";
-// @ts-ignore
-import * as snarkjs from 'snarkjs';
+
+const plonk = require("snarkjs").plonk;
 
 export const generateProof = async (input0: number, input1: number): Promise<any> => {
   console.log(`Generating vote proof with inputs: ${input0}, ${input1}`);
@@ -12,17 +12,17 @@ export const generateProof = async (input0: number, input1: number): Promise<any
 
   // Paths to the .wasm file and proving key
   const wasmPath = path.join(process.cwd(), 'circuits/build/simple_multiplier_js/simple_multiplier.wasm');
-  const provingKeyPath = path.join(process.cwd(), 'circuits/build/proving_key.zkey')
+  const provingKeyPath = path.join(process.cwd(), 'circuits/build/proving_key.zkey');
 
   try {
     // Generate a proof of the circuit and create a structure for the output signals
-    const { proof, publicSignals } = await snarkjs.plonk.fullProve(inputs, wasmPath, provingKeyPath);
-
+    const { proof, publicSignals } = await plonk.fullProve(inputs, wasmPath, provingKeyPath);
     // Convert the data into Solidity calldata that can be sent as a transaction
-    const calldataBlob = await snarkjs.plonk.exportSolidityCallData(proof, publicSignals);
+    const calldataBlob = await plonk.exportSolidityCallData(proof, publicSignals);
     const calldata = calldataBlob.split(',');
-
-    console.log(calldata);
+    
+    console.log(`proof: ${calldata[0]}`);
+    console.log(`publicSignals: ${JSON.parse(calldata[1])}`);
 
     return {
       proof: calldata[0], 

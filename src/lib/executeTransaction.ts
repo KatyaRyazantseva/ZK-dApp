@@ -1,22 +1,24 @@
 import { Addresses } from '@/shared/addresses';
 import { TransactionReceipt } from '@ethersproject/abstract-provider';
-import { prepareWriteContract, writeContract } from '@wagmi/core';
+import {  writeContract, waitForTransactionReceipt } from '@wagmi/core';
+import { config } from '../../src/config';
 
-export const executeTransaction = async (proof: any, publicSignals: Array<string>): Promise<TransactionReceipt> => {
+export const executeTransaction = async (proof: any, publicSignals: Array<string>): Promise<any> => {
+  // export default async function executeTransaction(proof: any, publicSignals: Array<string>){
   const abiPath = require('./abi/SimpleMultiplier.json');
-
-  // Prepare the transaction data
-  const config = await prepareWriteContract({
+  console.log("Execute transaction");
+  // Execute the transaction
+  const txHash = await writeContract(config, {
     address: Addresses.SIMPLE_MULTIPLIER_ADDR,
     abi: abiPath.abi,
     functionName: 'submitProof',
     args: [proof, publicSignals]
   });
-
-  // Execute the transaction
-  const writeResult = await writeContract(config);
+  console.log(`txHash: ${txHash}`);
 
   // Wait for the transaction block to be mined
-  const txResult = await writeResult.wait();
-  return txResult;
-}
+  const txResult = await waitForTransactionReceipt(config, {
+    hash: txHash});
+    console.log(`txResult: ${txResult}`);
+  return txHash;
+  }
